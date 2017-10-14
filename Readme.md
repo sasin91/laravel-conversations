@@ -1,9 +1,5 @@
 # Laravel 5 Conversations
 
-[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
-
-Remote API Communication package for WoW private servers
-
 ## Contents
 
 - [Installation](#installation)

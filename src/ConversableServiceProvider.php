@@ -4,7 +4,6 @@ namespace Sasin91\LaravelConversations;
 
 use Illuminate\Support\ServiceProvider;
 use Sasin91\LaravelConversations\Config\Policies;
-use Sasin91\LaravelConversations\Models\InvitationCode;
 
 class ConversableServiceProvider extends ServiceProvider
 {

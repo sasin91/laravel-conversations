@@ -1,5 +1,4 @@
 <?php return [
-	'url_prefix' =>	'conversations',
 
 	'queue' =>  'conversations',
 

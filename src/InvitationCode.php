@@ -1,6 +1,6 @@
 <?php
 
-namespace Sasin91\LaravelConversations\Models;
+namespace Sasin91\LaravelConversations;
 
 
 interface InvitationCode

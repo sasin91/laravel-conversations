@@ -3,7 +3,7 @@
 namespace Sasin91\LaravelConversations\Observers;
 
 
-use Sasin91\LaravelConversations\Models\InvitationCode;
+use Sasin91\LaravelConversations\InvitationCode;
 
 class InvitationObserver
 {
