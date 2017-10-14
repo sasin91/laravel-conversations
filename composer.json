@@ -1,0 +1,39 @@
+{
+	"name": "sasin91/laravel-conversations",
+    "description": "Enables User conversations in a Laravel 5 app!",
+    "keywords": ["conversation", "conversable", "laravel", "communication", "social"],
+    "license": "MIT",
+    "type": "package",
+
+    "minimum-stability": "dev",
+
+    "require": {
+        "illuminate/support": "^5.5",
+        "illuminate/contracts": "^5.5",
+        "illuminate/container": "^5.5"
+    },
+
+    "require-dev": {
+		"orchestra/database": "^3.4",
+		"orchestra/testbench": "^3.4",
+		"phpunit/phpunit": "^6.1"
+	},
+
+    "autoload": {
+        "psr-4": {
+            "Sasin91\\LaravelConversations\\": "src/",
+            "Sasin91\\LaravelConversations\\Migrations\\": "migrations/",
+            "Sasin91\\LaravelConversations\\Tests\\": "tests/"
+        },
+
+        "files": [
+            "src/Support/helpers.php"
+        ]
+    },
+
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "optimize-autoloader": true
+    }
+}
