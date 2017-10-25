@@ -21,7 +21,7 @@ class Policies extends ConfigDecorator
 	/** @inheritdoc */
 	public static function all()
 	{
-		return array_filter(parent::all(), function ($value, $key) {
+		return array_filter(array_wrap(parent::all()), function ($value, $key) {
 			$exclude = ['callbacks'];
 
 			return !in_array($key, $exclude);
@@ -33,7 +33,7 @@ class Policies extends ConfigDecorator
 	 */
 	public static function register()
 	{
-		foreach (array_wrap(static::all()) as $model => $policy) {
+		foreach (static::all() as $model => $policy) {
 			Gate::policy(Models::name($model), $policy);
 		}
 	}

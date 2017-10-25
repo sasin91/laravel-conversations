@@ -4,6 +4,7 @@ namespace Sasin91\LaravelConversations\Config;
 
 
 use Illuminate\Support\Str;
+use function array_wrap;
 
 abstract class ConfigDecorator
 {
@@ -119,12 +120,16 @@ abstract class ConfigDecorator
 	 * Get the value of a config value.
 	 *
 	 * @param string $value
+	 * @param array  $parameters
 	 * @param mixed  $default
 	 *
 	 * @return mixed
 	 */
-	public static function value($value, $default = null)
+	public static function value($value, $parameters = [], $default = null)
 	{
-		return value(self::get($value, $default));
+		return app()->call(
+			self::get($value, $default),
+			array_wrap($parameters)
+		);
 	}
 }

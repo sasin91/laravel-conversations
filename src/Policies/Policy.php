@@ -2,18 +2,17 @@
 
 namespace Sasin91\LaravelConversations\Policies;
 
-
 use Sasin91\LaravelConversations\Config\Policies;
 
 abstract class Policy
 {
-	public function before()
+	public function before($user, $ability)
 	{
-		return value(Policies::value('callbacks.before', true));
+		return Policies::value('callbacks.before', [$user, $ability], true);
 	}
 
-	public function after()
+	public function after($user, $ability)
 	{
-		return value(Policies::value('callbacks.after', true));
+		return Policies::value('callbacks.before', [$user, $ability], true);
 	}
 }
