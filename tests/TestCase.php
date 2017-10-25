@@ -2,6 +2,8 @@
 
 namespace Sasin91\LaravelConversations\Tests;
 
+require __DIR__ . '/../migrations/create_conversable_tables.php';
+
 use Faker\Factory as Faker;
 use Illuminate\Database\Eloquent\Factory as EloquentFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,7 +13,6 @@ use Sasin91\LaravelConversations\ConversableServiceProvider;
 
 abstract class TestCase extends TestbenchTestCase
 {
-
 	protected function setUp()
 	{
 		parent::setUp();

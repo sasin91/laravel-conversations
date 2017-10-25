@@ -2,7 +2,7 @@
 
 namespace Sasin91\LaravelConversations\Tests;
 
-use Sasin91\LaravelConversations\Migrations\CreateConversableTables;
+use CreateConversableTables;
 use Sasin91\LaravelConversations\Tests\Migrations\CreateUsersTable;
 
 trait Databases

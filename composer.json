@@ -22,7 +22,6 @@
     "autoload": {
         "psr-4": {
             "Sasin91\\LaravelConversations\\": "src/",
-            "Sasin91\\LaravelConversations\\Migrations\\": "migrations/",
             "Sasin91\\LaravelConversations\\Tests\\": "tests/"
         },
 
