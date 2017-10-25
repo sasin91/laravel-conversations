@@ -75,7 +75,7 @@ abstract class ConfigDecorator
 	{
 		$base = self::baseConfig();
 
-		$result = $base ? "{$base}.{$path}" : $base;
+		$result = $path ? "{$base}.{$path}" : $base;
 
 		return Str::lower($result);
 	}
