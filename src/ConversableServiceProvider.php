@@ -10,11 +10,13 @@ class ConversableServiceProvider extends ServiceProvider
 {
 	public function boot()
 	{
-		$timestamp = Carbon::now()->format('Y_m_d_His');
+		if (!class_exists('CreateConversableTables')) {
+			$timestamp = Carbon::now()->format('Y_m_d_His');
 
-		$this->publishes([
-			__DIR__ . '/../migrations/create_conversable_tables.php' => database_path("migrations/{$timestamp}_create_conversable_tables.php")
-		], 'Migrations');
+			$this->publishes([
+				__DIR__ . '/../migrations/create_conversable_tables.php' => database_path("migrations/{$timestamp}_create_conversable_tables.php")
+			], 'Migrations');
+		}
 
 		$this->publishes([
 			__DIR__ . '/../config/conversable.php' => config_path('conversable.php')
