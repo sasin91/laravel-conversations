@@ -39,7 +39,7 @@ class ConversableTest extends TestCase
 
 		Event::assertDispatched(InvitationDeclined::class);
 
-		$this->assertFalse(Users::jane()->conversations()->getResults()->contains($invitation->conversation));
+		$this->assertFalse(Users::jane()->conversations->contains($invitation->conversation));
 
 		$this->assertModelDeleted($invitation);
 	}
