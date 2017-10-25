@@ -7,7 +7,7 @@ class ReadableObserver
 {
 	public function creating($readable)
 	{
-		if (! isset($readable->read_at)) {
+		if (!isset($readable->read_at)) {
 			$readable->read_at = $readable->freshTimestamp();
 		}
 	}

@@ -21,15 +21,15 @@ class TrashUploadedFile implements ShouldQueue
 		$this->onQueue($this->queue());
 	}
 
-	public function handle(Storage $storage)
-	{
-		$storage->disk(config('conversable.disk'))->delete($this->path);
-	}
-
 	protected function queue()
 	{
 		$queue = value(config('conversable.queue'));
 
 		return (string)$queue;
+	}
+
+	public function handle(Storage $storage)
+	{
+		$storage->disk(config('conversable.disk'))->delete($this->path);
 	}
 }

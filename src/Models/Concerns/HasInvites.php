@@ -2,26 +2,26 @@
 
 namespace Sasin91\LaravelConversations\Models\Concerns;
 
-use Illuminate\Database\Eloquent\Model;
-use Sasin91\LaravelConversations\Models\Invitation;
+use Sasin91\LaravelConversations\Config\Models;
 
 trait HasInvites
 {
 	/**
-	 * Determine if the converation requires an invitation
+	 * Determine if the conversation requires an invitation
 	 *
 	 * @return bool
 	 */
 	public function isPublic()
 	{
-		return ! $this->requires_invitation;
+		return !$this->requires_invitation;
 	}
 
 	/**
 	 * Invite given User to participate in the conversation.
 	 *
-	 * @param Model $user
-	 * @return Invitation | Model
+	 * @param \Illuminate\Database\Eloquent\Model $user
+	 *
+	 * @return \Sasin91\LaravelConversations\Models\Invitation | \Illuminate\Database\Eloquent\Model
 	 */
 	public function invite($user)
 	{
@@ -37,6 +37,6 @@ trait HasInvites
 	 */
 	public function invitations()
 	{
-		return $this->hasMany(Invitation::class, 'conversation_id');
+		return $this->hasMany(Models::name('invitation'), 'conversation_id');
 	}
 }

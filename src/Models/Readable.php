@@ -11,17 +11,15 @@ class Readable extends Model
 	/**
 	 * @inheritdoc
 	 */
+	public $timestamps = false;
+	/**
+	 * @inheritdoc
+	 */
 	protected $fillable = ['participant_id', 'readable_id', 'readable_type', 'read_at'];
-
 	/**
 	 * @inheritdoc
 	 */
 	protected $dates = ['read_at'];
-
-	/**
-	 * @inheritdoc
-	 */
-	public $timestamps = false;
 
 	/**
 	 * @inheritdoc

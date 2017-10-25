@@ -27,18 +27,18 @@ class AttachmentObserver
 			Storage::delete($model->path);
 		}
 	}
-	
+
 	public function saving($model)
 	{
-		if (! isset($model->icon)) {
+		if (!isset($model->icon)) {
 			$model->setAttribute('icon', Icons::forAttachment($model));
 		}
 	}
 
 	public function saved($model)
 	{
-		if (! isset($model->download_link)) {
-			$model->update(['download_link'  => $model->link()]);
+		if (!isset($model->download_link)) {
+			$model->update(['download_link' => $model->link()]);
 		}
 	}
 }

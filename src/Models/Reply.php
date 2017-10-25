@@ -13,7 +13,7 @@ class Reply extends Model
 	/**
 	 * @inheritdoc
 	 */
-	protected $fillable = ['subject','content'];
+	protected $fillable = ['subject', 'content'];
 
 	/**
 	 * A reply is part of a conversation through a participant.
@@ -24,7 +24,7 @@ class Reply extends Model
 	{
 		return $this->belongsTo(
 			Models::name('conversation'),
-			'conversation_id', 
+			'conversation_id',
 			'id',
 			Models::name('participant')
 		);

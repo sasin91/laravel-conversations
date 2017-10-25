@@ -2,7 +2,6 @@
 
 namespace Sasin91\LaravelConversations\Models;
 
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Sasin91\LaravelConversations\Config\Models;
 use Sasin91\LaravelConversations\Observers\ConversationObserver;
@@ -48,7 +47,7 @@ class Conversation extends Model
 	public function creator()
 	{
 		return $this->hasOne(Models::name('creator'))
-					->oldest();
+			->oldest();
 	}
 
 	/**

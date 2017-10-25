@@ -13,7 +13,7 @@ trait InheritsParentTable
 	 */
 	public function getTable()
 	{
-		if (! isset($this->table)) {
+		if (!isset($this->table)) {
 			return str_replace('\\', '', Str::snake(Str::plural(class_basename(new parent))));
 		}
 

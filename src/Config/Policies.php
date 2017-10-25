@@ -3,8 +3,6 @@
 namespace Sasin91\LaravelConversations\Config;
 
 use Illuminate\Support\Facades\Gate;
-use Sasin91\LaravelConversations\Models\Conversation;
-use Sasin91\LaravelConversations\Policies\ConversationPolicy;
 
 class Policies extends ConfigDecorator
 {

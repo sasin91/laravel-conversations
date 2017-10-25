@@ -1,19 +1,19 @@
 <?php
 
-if (! function_exists('conversation')) {
+if (!function_exists('conversation')) {
 	/**
 	 * Get the full class name of the Conversation model,
 	 * or a new instance of it.
-	 * 
+	 *
 	 * @return string | object
 	 */
-	function conversation() 
+	function conversation()
 	{
 		return \Sasin91\LaravelConversations\Config\Models::instance('conversation', ...func_get_args());
 	}
 }
 
-if (! function_exists('participant')) {
+if (!function_exists('participant')) {
 	/**
 	 * Get the full class name of the Participant model,
 	 * or a new instance of it.
@@ -26,7 +26,7 @@ if (! function_exists('participant')) {
 	}
 }
 
-if (! function_exists('creator')) {
+if (!function_exists('creator')) {
 	/**
 	 * Get the full class name of the Participant model,
 	 * or a new instance of it.
@@ -39,7 +39,7 @@ if (! function_exists('creator')) {
 	}
 }
 
-if (! function_exists('moderator')) {
+if (!function_exists('moderator')) {
 	/**
 	 * Get the full class name of the Participant model,
 	 * or a new instance of it.
@@ -52,7 +52,7 @@ if (! function_exists('moderator')) {
 	}
 }
 
-if (! function_exists('reply')) {
+if (!function_exists('reply')) {
 	/**
 	 * Get the full class name of the Reply model,
 	 * or a new instance of it.
@@ -65,7 +65,7 @@ if (! function_exists('reply')) {
 	}
 }
 
-if (! function_exists('attachment')) {
+if (!function_exists('attachment')) {
 	/**
 	 * Get the full class name of the Attachment model,
 	 * or a new instance of it.

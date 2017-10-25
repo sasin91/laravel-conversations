@@ -2,6 +2,7 @@
 
 namespace Sasin91\LaravelConversations;
 
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Collection as DatabaseCollection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -12,7 +13,6 @@ use Sasin91\LaravelConversations\Models\Conversation;
 use Sasin91\LaravelConversations\Models\Participant;
 use Sasin91\LaravelConversations\Models\Readable;
 use Sasin91\LaravelConversations\Models\Reply;
-use Sasin91\LaravelConversations\Tests\User;
 
 trait Conversable
 {
@@ -37,6 +37,64 @@ trait Conversable
 	}
 
 	/**
+	 * A Conversable can have many Conversation replies.
+	 *
+	 * @return HasManyThrough
+	 */
+	public function replies()
+	{
+		return $this->hasManyThrough(Models::name('reply'), Models::name('conversation'));
+	}
+
+	/**
+	 * Reply to a conversation.
+	 *
+	 * @param Conversation $conversation
+	 * @param array        $attributes
+	 *
+	 * @return Reply
+	 */
+	public function reply($conversation, $attributes = [])
+	{
+		return tap(reply($attributes), function ($reply) use ($conversation) {
+			$reply->participant()->associate(
+				$this->participants()->firstOrCreate([
+					$conversation->getForeignKey() => $conversation->getKey()
+				])
+			);
+		});
+	}
+
+	/**
+	 * A Conversable can participate in many Conversations.
+	 *
+	 * @return HasMany
+	 */
+	public function participants()
+	{
+		return $this->hasMany(Models::name('participant'));
+	}
+
+	/**
+	 * Get all the Conversations we are attending with given model.
+	 *
+	 * @param Authenticatable | Participant $other
+	 *
+	 * @return DatabaseCollection
+	 */
+	public function attendingWith($other)
+	{
+		return $this->conversations()->withoutGlobalScopes()->whereHas('participants', function ($query) use ($other) {
+			$user = Models::user();
+			if ($other instanceof $user) {
+				return $query->where($other->getForeignKey(), '=', $other->getKey());
+			}
+
+			return $query->where(Models::participant()->getKeyName(), '=', $other->getKey());
+		})->get();
+	}
+
+	/**
 	 * Get all conversations through participant(s).
 	 *
 	 * @return BelongsToMany
@@ -57,65 +115,10 @@ trait Conversable
 	}
 
 	/**
-	 * A Conversable can have many Conversation replies.
-	 *
-	 * @return HasManyThrough
-	 */
-	public function replies()
-	{
-		return $this->hasManyThrough(Models::name('reply'), Models::name('conversation'));
-	}
-
-	/**
-	 * A Conversable can participate in many Conversations.
-	 *
-	 * @return HasMany
-	 */
-	public function participants()
-	{
-		return $this->hasMany(Models::name('participant'));
-	}
-
-	/**
-	 * Reply to a conversation.
-	 *
-	 * @param Conversation  $conversation
-	 * @param array         $attributes
-	 * @return Reply
-	 */
-	public function reply($conversation, $attributes = [])
-	{
-		return tap(reply($attributes), function ($reply) use($conversation) {
-			$reply->participant()->associate(
-				$this->participants()->firstOrCreate([
-					$conversation->getForeignKey() => $conversation->getKey()
-				])
-			);
-		});
-	}
-
-	/**
-	 * Get all the Conversations we are attending with given model.
-	 *
-	 * @param User | Participant    $other
-	 * @return DatabaseCollection
-	 */
-	public function attendingWith($other)
-	{
-		return $this->conversations()->withoutGlobalScopes()->whereHas('participants', function ($query) use($other) {
-			$user = Models::user();
-			if ($other instanceof $user) {
-				return $query->where($other->getForeignKey(), '=', $other->getKey());
-			}
-
-			return $query->where(Models::participant()->getKeyName(), '=', $other->getKey());
-		})->get();
-	}
-
-	/**
 	 * Attend given Conversation.
 	 *
 	 * @param Conversation $conversation
+	 *
 	 * @return Conversation
 	 */
 	public function attend($conversation)
@@ -129,6 +132,7 @@ trait Conversable
 	 * Leave given Conversation.
 	 *
 	 * @param Conversation $conversation
+	 *
 	 * @return void
 	 */
 	public function leave($conversation)
@@ -140,35 +144,37 @@ trait Conversable
 	 * Determine if the Conversable has read given conversation.
 	 *
 	 * @param Conversation $conversation
+	 *
 	 * @return boolean
 	 */
 	public function hasRead($conversation)
 	{
-		return Readable::whereIn(Models::foreignKey('participant'), $this->participants->pluck('id'))
-						->where(function ($query) use($conversation) {
-							$query->where('readable_type', get_class($conversation))
-								  ->where('readable_id', $conversation->getKey());
-						})
-						->exists();
+		return Models::instance('reads')
+			->whereIn(Models::foreignKey('participant'), $this->participants->pluck('id'))
+			->where(function ($query) use ($conversation) {
+				$query->where('readable_type', get_class($conversation))
+					->where('readable_id', $conversation->getKey());
+			})
+			->exists();
 	}
 
 	/**
 	 * Mark given conversation as read.
 	 *
-	 * @param Conversation          $conversation
-	 * @param Participant | null    $participant
+	 * @param Conversation       $conversation
+	 * @param Participant | null $participant
 	 *
 	 * @return Readable|Model
 	 */
 	public function markAsRead($conversation, $participant = null)
 	{
 		$participant = $participant ?? $this->participants
-											->where($conversation->getForeignKey(), $conversation->getKey())
-											->first();
+				->where($conversation->getForeignKey(), $conversation->getKey())
+				->first();
 
 		return $conversation->readers()->create([
-			'read_at' 						=>	$read_at ?? $this->freshTimestamp(),
-			$participant->getForeignKey()	=>	$participant->getKey()
+			'read_at' => $read_at ?? $this->freshTimestamp(),
+			$participant->getForeignKey() => $participant->getKey()
 		]);
 	}
 }

@@ -55,7 +55,7 @@ class Participant extends Model
 	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
-	public function replies() 
+	public function replies()
 	{
 		return $this->hasMany(Models::name('reply'));
 	}
