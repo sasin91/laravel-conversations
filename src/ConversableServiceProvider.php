@@ -9,7 +9,13 @@ class ConversableServiceProvider extends ServiceProvider
 {
 	public function boot()
 	{
-		//
+		$this->publishes([
+			__DIR__ . '/../migrations' => database_path('migrations')
+		], 'Migrations');
+
+		$this->publishes([
+			__DIR__ . '/../config/conversable.php' => config_path('conversable.php')
+		], 'Config');
 	}
 
 	public function register()
