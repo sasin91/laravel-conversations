@@ -18,6 +18,16 @@ class Policies extends ConfigDecorator
 		Gate::policy(Models::name($model), $policy);
 	}
 
+	/** @inheritdoc */
+	public static function all()
+	{
+		return array_filter(parent::all(), function ($value, $key) {
+			$exclude = ['callbacks'];
+
+			return !in_array($key, $exclude);
+		}, ARRAY_FILTER_USE_BOTH);
+	}
+
 	/**
 	 * Register all model policies.
 	 */
