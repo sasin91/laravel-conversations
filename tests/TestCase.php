@@ -2,19 +2,12 @@
 
 namespace Sasin91\LaravelConversations\Tests;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Event;
-use Orchestra\Testbench\TestCase as TestbenchTestCase;
-use Sasin91\LaravelConversations\Config\Models;
 use Faker\Factory as Faker;
 use Illuminate\Database\Eloquent\Factory as EloquentFactory;
+use Illuminate\Database\Eloquent\Model;
+use Orchestra\Testbench\TestCase as TestbenchTestCase;
+use Sasin91\LaravelConversations\Config\Models;
 use Sasin91\LaravelConversations\ConversableServiceProvider;
-use Sasin91\LaravelConversations\Migrations\CreateConversationParticipantsTable;
-use Sasin91\LaravelConversations\Migrations\CreateConversationRepliesTable;
-use Sasin91\LaravelConversations\Migrations\CreateConversationsTable;
-use Sasin91\LaravelConversations\Migrations\CreateInvitationsTable;
-use Sasin91\LaravelConversations\Migrations\CreateReadablesTable;
-use Sasin91\LaravelConversations\Tests\Migrations\CreateUsersTable;
 
 abstract class TestCase extends TestbenchTestCase
 {
@@ -27,14 +20,11 @@ abstract class TestCase extends TestbenchTestCase
 			return EloquentFactory::construct(Faker::create(), __DIR__.'/Factories');
 		});
 
-		(new CreateUsersTable)->up();
-		(new CreateConversationsTable)->up();
-		(new CreateConversationParticipantsTable)->up();
-		(new CreateConversationRepliesTable)->up();
-		(new CreateReadablesTable)->up();
-		(new CreateInvitationsTable)->up();
-
 		//Event::fake();
+
+		if (in_array(Databases::class, class_uses(static::class))) {
+			$this->setupDatabases();
+		}
 	}
 
 	protected function getPackageProviders($app)

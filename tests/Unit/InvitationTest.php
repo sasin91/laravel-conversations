@@ -3,10 +3,13 @@
 namespace Sasin91\LaravelConversations\Tests\Unit;
 
 use Sasin91\LaravelConversations\Config\Models;
+use Sasin91\LaravelConversations\Tests\Databases;
 use Sasin91\LaravelConversations\Tests\TestCase;
 
 class InvitationTest extends TestCase
 {
+	use Databases;
+
 	/** @test */
 	public function it_generates_a_code_on_creation()
 	{

@@ -7,11 +7,14 @@ use Sasin91\LaravelConversations\Config\Models;
 use Sasin91\LaravelConversations\Models\Concerns\CanBeRead;
 use Sasin91\LaravelConversations\Models\Conversation;
 use Sasin91\LaravelConversations\Observers\ConversationObserver;
+use Sasin91\LaravelConversations\Tests\Databases;
 use Sasin91\LaravelConversations\Tests\Fixtures\Users;
 use Sasin91\LaravelConversations\Tests\TestCase;
 
 class ConversationTest extends TestCase
 {
+	use Databases;
+
 	/** @test */
 	function it_can_be_read()
 	{

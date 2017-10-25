@@ -8,11 +8,14 @@ use Sasin91\LaravelConversations\Events\InvitationAccepted;
 use Sasin91\LaravelConversations\Events\InvitationDeclined;
 use Sasin91\LaravelConversations\Models\Conversation;
 use Sasin91\LaravelConversations\Models\Invitation;
+use Sasin91\LaravelConversations\Tests\Databases;
 use Sasin91\LaravelConversations\Tests\Fixtures\Users;
 use Sasin91\LaravelConversations\Tests\TestCase;
 
 class ConversableTest extends TestCase
 {
+	use Databases;
+
 	/** @test */
 	public function can_start_a_conversation()
 	{
@@ -36,7 +39,7 @@ class ConversableTest extends TestCase
 
 		Event::assertDispatched(InvitationDeclined::class);
 
-		$this->assertFalse(Users::jane()->conversations->contains($invitation->conversation));
+		$this->assertFalse(Users::jane()->conversations()->getResults()->contains($invitation->conversation));
 
 		$this->assertModelDeleted($invitation);
 	}
