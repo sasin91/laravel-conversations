@@ -60,4 +60,18 @@ class PolicyTest extends TestCase
 
 		$this->assertEquals(Policies::registrable(), Gate::policies());
 	}
+
+	/** @test */
+	function it_does_not_call_null_callbacks()
+	{
+		$this->app['config']->set('conversable.policies.callbacks.before', null);
+
+		try {
+			$this->assertNull(
+				Policies::value('callbacks.before')
+			);
+		} catch (\ReflectionException $e) {
+			$this->fail("Attempt calling null callback.");
+		}
+	}
 }

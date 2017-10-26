@@ -127,9 +127,12 @@ abstract class ConfigDecorator
 	 */
 	public static function value($value, $parameters = [], $default = null)
 	{
-		return app()->call(
-			self::get($value, $default),
-			array_wrap($parameters)
-		);
+		$callback = self::get($value, $default);
+
+		if ($callback) {
+			return app()->call($callback, array_wrap($parameters));
+		}
+
+		return $default;
 	}
 }
