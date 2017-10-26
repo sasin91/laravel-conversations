@@ -24,8 +24,8 @@ class ConversableTest extends TestCase
 		$conversation = $john->conversations()->create(['topic' => 'hello world']);
 
 		$this->assertDatabaseHas(Models::table('participant'), [
-			'user_id'           =>  $john->getKey(),
-			'conversation_id'   =>  $conversation->getKey()
+			'user_id' => $john->getKey(),
+			'conversation_id' => $conversation->getKey()
 		]);
 	}
 
@@ -42,6 +42,23 @@ class ConversableTest extends TestCase
 		$this->assertFalse(Users::jane()->conversations->contains($invitation->conversation));
 
 		$this->assertModelDeleted($invitation);
+	}
+
+	private function conversationInviteForJane(): Invitation
+	{
+		/** @var Conversation $conversation */
+		$conversation = Users::john()->conversations()->create([
+			'topic' => 'hello world',
+			'requires_invitation' => true
+		]);
+
+		return tap($conversation->invitations()->create([
+			'invitee_id' => Users::jane()->getKey(),
+			'code' => 'invitation-code-1234'
+		]), function (Invitation $invitation) {
+			$invitation->setRelation('invitee', Users::jane());
+		});
+
 	}
 
 	/** @test */
@@ -66,8 +83,8 @@ class ConversableTest extends TestCase
 		self::assertNotNull(Users::jane()->attend($conversation), "Could not join conversation.");
 
 		$this->assertDatabaseHas(Models::table('participant'), [
-			'user_id'           =>  Users::jane()->getKey(),
-			'conversation_id'   =>  $conversation->getKey()
+			'user_id' => Users::jane()->getKey(),
+			'conversation_id' => $conversation->getKey()
 		]);
 	}
 
@@ -75,12 +92,15 @@ class ConversableTest extends TestCase
 	public function can_be_invited_to_a_private_conversation()
 	{
 		/** @var Conversation $conversation */
-		$conversation = Users::john()->conversations()->create(['topic' => 'hello world', 'requires_invitation' => true]);
+		$conversation = Users::john()->conversations()->create([
+			'topic' => 'hello world',
+			'requires_invitation' => true
+		]);
 		$conversation->invite(Users::jane());
 
 		$this->assertDatabaseHas(Models::table('invitation'), [
-			'invitee_id'        =>  Users::jane()->getKey(),
-			'conversation_id'   =>  $conversation->getKey()
+			'invitee_id' => Users::jane()->getKey(),
+			'conversation_id' => $conversation->getKey()
 		]);
 	}
 
@@ -97,16 +117,19 @@ class ConversableTest extends TestCase
 		$john->leave($conversation);
 
 		$this->assertDatabaseMissing(Models::table('participant'), [
-			'user_id'		    =>	$john->getKey(),
-			'conversation_id'	=>	$conversation->getKey()
-		]);	
+			'user_id' => $john->getKey(),
+			'conversation_id' => $conversation->getKey()
+		]);
 	}
 
 	/** @test */
 	public function can_reply_to_a_conversation()
 	{
 		/** @var Conversation $conversation */
-		$conversation = Users::john()->conversations()->create(['topic' => 'hello world', 'requires_invitation' => true]);
+		$conversation = Users::john()->conversations()->create([
+			'topic' => 'hello world',
+			'requires_invitation' => true
+		]);
 
 		Users::john()->reply($conversation, [
 			'subject' => 'testing',
@@ -114,23 +137,9 @@ class ConversableTest extends TestCase
 		])->save();
 
 		$this->assertDatabaseHas(Models::table('reply'), [
-			'participant_id'	=>	Users::john()->participants->first()->id,
-			'subject'	        =>	'testing',
-			'content'	        =>	'testing'
+			'participant_id' => Users::john()->participants->first()->id,
+			'subject' => 'testing',
+			'content' => 'testing'
 		]);
-	}
-
-	private function conversationInviteForJane(): Invitation
-	{
-		/** @var Conversation $conversation */
-		$conversation = Users::john()->conversations()->create(['topic' => 'hello world', 'requires_invitation' => true]);
-
-		return tap($conversation->invitations()->create([
-			'invitee_id' => Users::jane()->getKey(),
-			'code' => 'invitation-code-1234'
-		]), function (Invitation $invitation) {
-			$invitation->setRelation('invitee', Users::jane());
-		});
-
 	}
 }

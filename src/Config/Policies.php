@@ -19,6 +19,16 @@ class Policies extends ConfigDecorator
 	}
 
 	/**
+	 * Register all model policies.
+	 */
+	public static function register()
+	{
+		foreach (static::registrable() as $model => $policy) {
+			Gate::policy($model, $policy);
+		}
+	}
+
+	/**
 	 * Get the registrable policies.
 	 *
 	 * @return array
@@ -32,15 +42,5 @@ class Policies extends ConfigDecorator
 		})->mapWithKeys(function ($policy, $model) {
 			return [Models::name($model) ?? $model => $policy];
 		})->toArray();
-	}
-
-	/**
-	 * Register all model policies.
-	 */
-	public static function register()
-	{
-		foreach (static::registrable() as $model => $policy) {
-			Gate::policy($model, $policy);
-		}
 	}
 }

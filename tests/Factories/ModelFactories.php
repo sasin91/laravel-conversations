@@ -1,9 +1,6 @@
 <?php
 
 use Sasin91\LaravelConversations\Config\Models;
-use Sasin91\LaravelConversations\Models\Conversation;
-use Sasin91\LaravelConversations\Models\Invitation;
-use Sasin91\LaravelConversations\Models\Participant;
 use Sasin91\LaravelConversations\Tests\User;
 
 $factory->define(User::class, function ($faker) {
@@ -12,20 +9,20 @@ $factory->define(User::class, function ($faker) {
 
 $factory->define(Models::name('conversation'), function ($faker) {
 	return [
-		'topic'	=>	$faker->paragraph
+		'topic' => $faker->paragraph
 	];
 });
 
 $factory->define(Models::name('participant'), function ($faker) {
 	return [
 		'conversation_id' => factory(Models::name('conversation'))->lazy(),
-		'user_id'	=>	factory(Models::name('user'))->lazy(),
+		'user_id' => factory(Models::name('user'))->lazy(),
 
-		'is_moderator'	=>	false,
-		'is_creator'	=>	false,
+		'is_moderator' => false,
+		'is_creator' => false,
 
-		'banned_at'		=>	null,
-		'ban_reason'	=>	null	
+		'banned_at' => null,
+		'ban_reason' => null
 	];
 });
 
@@ -41,8 +38,8 @@ $factory->state(Models::name('participant'), 'banned', function () {
 	static $reason, $date;
 
 	return [
-		'banned_at' 	=>	$date,
-		'ban_reason'	=>	$reason
+		'banned_at' => $date,
+		'ban_reason' => $reason
 	];
 });
 

@@ -21,7 +21,10 @@ class ConversationTest extends TestCase
 		self::assertContains(CanBeRead::class, class_uses_recursive(Models::name('conversation')));
 
 		/** @var Conversation $conversation */
-		$conversation = Users::john()->conversations()->create(['topic' => 'hello world', 'requires_invitation' => false]);
+		$conversation = Users::john()->conversations()->create([
+			'topic' => 'hello world',
+			'requires_invitation' => false
+		]);
 		Users::jane()->attend($conversation);
 
 		$this->assertFalse(Users::jane()->hasRead($conversation));
@@ -32,20 +35,20 @@ class ConversationTest extends TestCase
 	}
 
 	/** @test */
-	function it_assigns_first_participant_as_creator_when_undefined() 
+	function it_assigns_first_participant_as_creator_when_undefined()
 	{
 		Event::fake();
 
 		$conversation = Users::john()->conversations()->create(['topic' => 'hello world']);
-		
+
 		Event::assertDispatched(
 			'eloquent.saving: Sasin91\LaravelConversations\Models\Conversation',
-			function($e, $m) {
+			function ($e, $m) {
 				(new ConversationObserver)->saving($m);
 
 				return true;
 			});
-		
+
 		$this->assertTrue(
 			$conversation->creator->is($conversation->participants->first())
 		);

@@ -18,7 +18,7 @@ abstract class TestCase extends TestbenchTestCase
 		parent::setUp();
 
 		$this->app->bind(EloquentFactory::class, function ($app) {
-			return EloquentFactory::construct(Faker::create(), __DIR__.'/Factories');
+			return EloquentFactory::construct(Faker::create(), __DIR__ . '/Factories');
 		});
 
 		//Event::fake();
@@ -44,6 +44,7 @@ abstract class TestCase extends TestbenchTestCase
 	 * Define environment setup.
 	 *
 	 * @param  \Illuminate\Foundation\Application
+	 *
 	 * @return void
 	 */
 	protected function getEnvironmentSetUp($app)
@@ -51,12 +52,12 @@ abstract class TestCase extends TestbenchTestCase
 		// Setup default database to use sqlite :memory:
 		$app['config']->set('database.default', 'testbench');
 		$app['config']->set('database.connections.testbench', [
-			'driver'   => 'sqlite',
+			'driver' => 'sqlite',
 			'database' => ':memory:',
-			'prefix'   => '',
+			'prefix' => '',
 		]);
 
-		$app['config']->set('conversable', include(__DIR__.'/../config/conversable.php'));
+		$app['config']->set('conversable', include(__DIR__ . '/../config/conversable.php'));
 
 		Models::swap('user', 'Sasin91\LaravelConversations\Tests\User');
 	}
@@ -65,11 +66,12 @@ abstract class TestCase extends TestbenchTestCase
 	 * Determine if given model's database has been deleted.
 	 *
 	 * @param Model $model
+	 *
 	 * @return bool
 	 */
 	protected function assertModelDeleted($model): bool
 	{
-		if (! $model->exists) {
+		if (!$model->exists) {
 			return true;
 		}
 
