@@ -15,9 +15,4 @@ abstract class Policy
 	{
 		return Policies::value('callbacks.before', [$user, $ability], true);
 	}
-
-	public function create()
-	{
-		return true;
-	}
 }

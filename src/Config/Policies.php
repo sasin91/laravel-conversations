@@ -18,14 +18,20 @@ class Policies extends ConfigDecorator
 		Gate::policy(Models::name($model), $policy);
 	}
 
-	/** @inheritdoc */
-	public static function all()
+	/**
+	 * Get the registrable policies.
+	 *
+	 * @return array
+	 */
+	public static function registrable()
 	{
-		return array_filter(array_wrap(parent::all()), function ($value, $key) {
+		return collect(static::all())->filter(function ($value, $key) {
 			$exclude = ['callbacks'];
 
 			return !in_array($key, $exclude);
-		}, ARRAY_FILTER_USE_BOTH);
+		})->mapWithKeys(function ($policy, $model) {
+			return [Models::name($model) ?? $model => $policy];
+		})->toArray();
 	}
 
 	/**
@@ -33,8 +39,8 @@ class Policies extends ConfigDecorator
 	 */
 	public static function register()
 	{
-		foreach (static::all() as $model => $policy) {
-			Gate::policy(Models::name($model), $policy);
+		foreach (static::registrable() as $model => $policy) {
+			Gate::policy($model, $policy);
 		}
 	}
 }

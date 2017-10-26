@@ -19,7 +19,10 @@
 		],
 
 		'conversation'  =>  'Sasin91\LaravelConversations\Policies\ConversationPolicy',
-		'invitation'    =>  'Sasin91\LaravelConversations\Policies\InvitationPolicy'
+		'invitation' => 'Sasin91\LaravelConversations\Policies\InvitationPolicy',
+		'participant' => 'Sasin91\LaravelConversations\Policies\ParticipantPolicy',
+		'attachment' => 'Sasin91\LaravelConversations\Policies\ReplyAttachmentPolicy',
+		'reply' => 'Sasin91\LaravelConversations\Policies\ReplyPolicy'
 	],
 
 	'models' => [
