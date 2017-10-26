@@ -4,6 +4,11 @@ namespace Sasin91\LaravelConversations\Policies;
 
 class ParticipantPolicy extends Policy
 {
+	public function create()
+	{
+		return true;
+	}
+
 	public function view($user, $participant)
 	{
 		return $user->conversations
@@ -16,7 +21,7 @@ class ParticipantPolicy extends Policy
 		return $participant->user->is($user);
 	}
 
-	public function destroy($user, $participant)
+	public function delete($user, $participant)
 	{
 		return $participant->user->is($user);
 	}

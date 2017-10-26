@@ -19,7 +19,7 @@ class ConversationPolicy extends Policy
 		return $conversation->creator->user->is($user);
 	}
 
-	public function destroy($user, $conversation)
+	public function delete($user, $conversation)
 	{
 		return $conversation->creator->user->is($user);
 	}

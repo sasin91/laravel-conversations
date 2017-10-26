@@ -19,7 +19,7 @@ class InvitationPolicy extends Policy
 		return $invitation->creator->is($user);
 	}
 
-	public function destroy($user, $invitation)
+	public function delete($user, $invitation)
 	{
 		return $invitation->creator->is($user)
 			|| $invitation->invitee->is($user);

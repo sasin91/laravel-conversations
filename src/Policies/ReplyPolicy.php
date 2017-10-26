@@ -4,9 +4,9 @@ namespace Sasin91\LaravelConversations\Policies;
 
 class ReplyPolicy extends Policy
 {
-	public function create($user)
+	public function create()
 	{
-
+		return true;
 	}
 
 	public function view($user, $reply)
@@ -19,7 +19,7 @@ class ReplyPolicy extends Policy
 		return $reply->participant->user->is($user);
 	}
 
-	public function destroy($user, $reply)
+	public function delete($user, $reply)
 	{
 		return $reply->participant->user->is($user);
 	}

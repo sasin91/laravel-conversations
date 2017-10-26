@@ -23,7 +23,7 @@ class ReplyAttachmentPolicy extends Policy
 			->user->is($user);
 	}
 
-	public function destroy($user, $attachment)
+	public function delete($user, $attachment)
 	{
 		return $attachment->attachable
 			->participant
