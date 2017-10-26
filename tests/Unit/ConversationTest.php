@@ -49,5 +49,22 @@ class ConversationTest extends TestCase
 		$this->assertTrue(
 			$conversation->creator->is($conversation->participants->first())
 		);
-	} 
+	}
+
+	/** @test */
+	function it_deletes_all_participants_before_deleting()
+	{
+		/** @var Conversation $conversation */
+		$conversation = Users::john()->conversations()->create(['topic' => 'to be destroyed']);
+
+		$this->assertTrue($conversation->participants->isNotEmpty(), "No participant was created with conversation.");
+
+		$participants = $conversation->participants;
+
+		$conversation->delete();
+
+		$participants->each(function ($participant) {
+			$this->assertFalse($participant->exists);
+		});
+	}
 }
