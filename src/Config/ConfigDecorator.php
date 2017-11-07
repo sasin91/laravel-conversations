@@ -5,6 +5,7 @@ namespace Sasin91\LaravelConversations\Config;
 
 use Illuminate\Support\Str;
 use function array_wrap;
+use function class_exists;
 
 abstract class ConfigDecorator
 {
@@ -27,13 +28,18 @@ abstract class ConfigDecorator
 	 * @param string $value
 	 * @param array  $attributes
 	 *
+	 * @throws \InvalidArgumentException
 	 * @return object
 	 */
 	public static function instance($value, $attributes = [])
 	{
 		$class = static::name($value);
 
-		return new $class($attributes);
+		if (class_exists($class)) {
+			return new $class($attributes);
+		}
+
+		throw new \InvalidArgumentException("No class found for {$value}.");
 	}
 
 	/**
