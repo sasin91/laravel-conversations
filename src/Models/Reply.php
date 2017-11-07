@@ -43,10 +43,10 @@ class Reply extends Model
 	/**
 	 * Uploaded attachments
 	 *
-	 * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+	 * @return \Illuminate\Database\Eloquent\Relations\MorphMany
 	 */
 	public function attachments()
 	{
-		return $this->morphToMany(Models::name('attachment'), 'attachable');
+		return $this->morphMany(Models::name('attachment'), 'attachable');
 	}
 }

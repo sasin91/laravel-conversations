@@ -11,6 +11,7 @@ use Sasin91\LaravelConversations\Models\Invitation;
 use Sasin91\LaravelConversations\Tests\Databases;
 use Sasin91\LaravelConversations\Tests\Fixtures\Users;
 use Sasin91\LaravelConversations\Tests\TestCase;
+use function forward_static_call;
 
 class ConversableTest extends TestCase
 {
@@ -140,6 +141,35 @@ class ConversableTest extends TestCase
 			'participant_id' => Users::john()->participants->first()->id,
 			'subject' => 'testing',
 			'content' => 'testing'
+		]);
+	}
+
+	/** @test */
+	function can_upload_attachments_to_a_reply()
+	{
+		/** @var Conversation $conversation */
+		$conversation = Users::john()->conversations()->create([
+			'topic' => 'hello world',
+			'requires_invitation' => true
+		]);
+
+		$reply = Users::john()->reply($conversation, [
+			'subject' => 'testing',
+			'content' => 'testing'
+		]);
+
+		$reply->saveOrFail();
+
+		/** @var \Sasin91\LaravelConversations\Models\Attachment $attachment */
+		$attachment = forward_static_call([Models::instance('attachment'), 'fake']);
+
+		$reply->attachments()->save($attachment);
+
+		$this->assertDatabaseHas(Models::table('attachment'), [
+			'attachable_id' => $reply->getKey(),
+			'attachable_type' => get_class($reply),
+			'name' => $attachment->name,
+			'id' => $attachment->getKey()
 		]);
 	}
 }
