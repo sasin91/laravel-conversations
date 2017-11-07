@@ -2,7 +2,6 @@
 
 namespace Sasin91\LaravelConversations\Models;
 
-
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
@@ -22,6 +21,21 @@ class Attachment extends Model
 	];
 
 	protected $dates = ['uploaded_at'];
+
+	/**
+	 * Upload a fake file.
+	 *
+	 * @param null|null $name
+	 *
+	 * @return static
+	 */
+	public static function fake($name = null)
+	{
+		return static::upload(
+			UploadedFile::fake()->create($name),
+			$name
+		);
+	}
 
 	/**
 	 * Upload given file as an attachment.
