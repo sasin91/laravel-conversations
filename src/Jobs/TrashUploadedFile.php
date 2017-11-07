@@ -21,7 +21,7 @@ class TrashUploadedFile implements ShouldQueue
 		$this->onQueue($this->queue());
 	}
 
-	protected function queue()
+	public function queue()
 	{
 		$queue = value(config('conversable.queue'));
 
