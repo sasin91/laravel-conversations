@@ -100,7 +100,7 @@ class CreateConversableTables extends Migration
 		Schema::create(Models::table('attachment'), function (Blueprint $table) {
 			$table->increments('id');
 
-			$table->morphs('attachable');
+			$table->nullableMorphs('attachable');
 
 			$table->string('name');
 			$table->string('path');
