@@ -8,11 +8,23 @@ abstract class Policy
 {
 	public function before($user, $ability)
 	{
-		return Policies::value('callbacks.before', [$user, $ability], true);
+		$before = Policies::getBeforeCallback();
+
+		if (is_null($before)) {
+			return true;
+		}
+
+		return $before($user, $ability);
 	}
 
 	public function after($user, $ability)
 	{
-		return Policies::value('callbacks.before', [$user, $ability], true);
+		$after = Policies::getAfterCallback();
+
+		if (is_null($after)) {
+			return true;
+		}
+
+		return $after($user, $ability);
 	}
 }

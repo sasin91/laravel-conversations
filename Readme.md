@@ -61,6 +61,20 @@ You may rebind the concrete of the InvitationCode in your service provider.
 as a convenience, the contract defines __invoke method to be defined,
 which means it's possible to use a \Closure for the implementation.
 
+<a name="policy_filters" />
+
+### Policy filters
+You may register global within scope of this package policy callbacks in your service provider,
+```php
+\Sasin91\LaravelConversations\Config\Policies::before(function ($user, $ability) {
+    // return boolean
+});
+
+\Sasin91\LaravelConversations\Config\Policies::after(function ($user, $ability) {
+    // return boolean
+});
+```
+
 **And you are ready to go.**
 
 <a name="usage" />

@@ -5,6 +5,7 @@ namespace Sasin91\LaravelConversations\Tests\Unit;
 use Illuminate\Support\Facades\Gate;
 use Sasin91\LaravelConversations\Config\Policies;
 use Sasin91\LaravelConversations\Tests\TestCase;
+use Sasin91\LaravelConversations\Tests\TestPolicy;
 
 /**
  * Class PolicyTest
@@ -16,41 +17,31 @@ class PolicyTest extends TestCase
 	/** @test */
 	function it_lists_registrable_policies_without_callbacks()
 	{
-		$this->app['config']->set('conversable.policies', ['testing' => '1234', 'callbacks' => []]);
+		$this->app['config']->set('conversable.policies', ['testing' => '1234']);
 
 		self::assertEquals(['testing' => '1234'], Policies::registrable());
 	}
 
 	/** @test */
-	function it_can_get_the_callbacks()
-	{
-		$this->app['config']->set('conversable.policies.callbacks', ['before' => 'yay', 'after' => 'nay']);
-
-		self::assertEquals(['before' => 'yay', 'after' => 'nay'], Policies::get('callbacks'));
-	}
-
-	/** @test */
 	function it_executes_a_before_callback()
 	{
-		config([
-			'conversable.policies.callbacks.before' => function ($value) {
-				self::assertEquals('test-value', $value);
-			}
-		]);
+		Policies::before(function ($user, $ability) {
+			self::assertNull($user);
+			self::assertEquals('test-value', $ability);
+		});
 
-		Policies::value('callbacks.before', ['test-value'], true);
+		(new TestPolicy)->before(null, 'test-value');
 	}
 
 	/** @test */
 	function it_executes_a_after_callback()
 	{
-		config([
-			'conversable.policies.callbacks.after' => function ($value) {
-				self::assertEquals('test-value', $value);
-			}
-		]);
+		Policies::after(function ($user, $ability) {
+			self::assertNull($user);
+			self::assertEquals('test-value', $ability);
+		});
 
-		Policies::value('callbacks.after', ['test-value'], true);
+		(new TestPolicy)->after(null, 'test-value');
 	}
 
 	/** @test */
@@ -58,20 +49,10 @@ class PolicyTest extends TestCase
 	{
 		Policies::register();
 
-		$this->assertEquals(Policies::registrable(), Gate::policies());
-	}
+		$reflection = new \ReflectionClass($gate = Gate::getFacadeRoot());
+		$policies = $reflection->getProperty('policies');
+		$policies->setAccessible(true);
 
-	/** @test */
-	function it_does_not_call_null_callbacks()
-	{
-		$this->app['config']->set('conversable.policies.callbacks.before', null);
-
-		try {
-			$this->assertNull(
-				Policies::value('callbacks.before')
-			);
-		} catch (\ReflectionException $e) {
-			$this->fail("Attempt calling null callback.");
-		}
+		$this->assertEquals(Policies::registrable(), $policies->getValue($gate));
 	}
 }

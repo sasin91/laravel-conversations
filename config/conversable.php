@@ -13,11 +13,6 @@
 	],
 
 	'policies' => [
-		'callbacks' => [
-			'before' => null,
-			'after' => null,
-		],
-
 		'conversation' => 'Sasin91\LaravelConversations\Policies\ConversationPolicy',
 		'invitation' => 'Sasin91\LaravelConversations\Policies\InvitationPolicy',
 		'participant' => 'Sasin91\LaravelConversations\Policies\ParticipantPolicy',
